@@ -359,9 +359,9 @@ const Home = () => {
           <p className="text-2xl text-amber-400 py-6 font-bold">Trải nghiệm cùng HappyWeekendHotel</p>
       
           <div className="flex justify-between">
-            <div>
-        <a href="" className="absolute"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656566391_62bd327718636.jpg" alt="" /></a>
-        <p className=" relative text-slate-100 text-3xl font-bold m-20 tracking-wide flex">Giá sốc 
+            <div className="mb:block mbs:hidden">
+        <a href="" className=" mb:absolute mbs:block"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656566391_62bd327718636.jpg" alt="" /></a>
+        <p className="relative text-slate-100 text-3xl font-bold m-20 tracking-wide flex">Giá sốc 
         <svg className="text-slate-100" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512"><title>ionicons-v5-m</title><path d="M315.27,33,96,304H224L192.49,477.23a2.36,2.36,0,0,0,2.33,2.77h0a2.36,2.36,0,0,0,1.89-.95L416,208H288L319.66,34.75A2.45,2.45,0,0,0,317.22,32h0A2.42,2.42,0,0,0,315.27,33Z" /></svg>
         Đêm Nay</p>
         <h1 className="text-normal font-semibold text-[orange] py-3 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[80px] bg-slate-200 w-[100px] rounded-lg">
@@ -382,7 +382,7 @@ const Home = () => {
           <div className="flex justify-between items-center ">
             <h1 className="relative"><img className="rounded-lg" src="https://s3.go2joy.vn/1000w/cover_photo/33_14148447441.jpg" alt="" /></h1>
             <h1 className="absolute pb-20 ml-[40px] text-white text-3xl mb:pb-20 ml-[40px] mbs:pb-10 ml-[20px] font-bold mb:text-3xl mbs:text-xl">Những điều thú vị có thể bạn chưa biết</h1>
-            <h1 className="text-normal font-semibold text-[orange] py-6 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[40px] bg-slate-200 w-[200px] rounded-lg mbs: mb:mt-[60px] ml-[20px] w-[100px] py-2 h-[30px]">
+            <h1 className="text-normal font-semibold text-[orange] py-6 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[40px] bg-slate-200 w-[200px] rounded-lg mbs: mb:mt-[60px] ml-[20px] w-[200px] py-2 h-[30px]">
             <Link href="/blog">Danh sách các bài blog</Link>
               
                
