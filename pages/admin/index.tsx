@@ -20,6 +20,7 @@ import {
 import { useEffect, useState } from 'react';
 import { isFirstDayOfMonth } from 'date-fns/fp';
 import axios from 'axios';
+import { log } from 'console';
 ChartJS.register(
   BarElement,
   CategoryScale,
@@ -34,6 +35,7 @@ function Page() {
   const [dataDashBoard, setDataDashBoard] = useState([])
   const [totalUser, setTotalUser] = useState([])
   const [revenueByMonth, setRevenueByMonth] = useState<any>({})
+  const [mostRoomRevenue, setMostRoomRevenue] = useState<any>([])
   const [revenueByRoom, setRevenueByRoom] = useState<any>([])
   const defaultCondition = {
     month: new Date().getMonth() + 1,
@@ -72,13 +74,15 @@ function Page() {
     const user = await axios.get("http://localhost:4000/api/users");
     const revenueByMonth = await axios.post("http://localhost:4000/api/revenueByMonth");
     const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom");
+    const getRoomRevenue = await axios.post("http://localhost:4000/api/getRoomRevenue");
     setRevenueByMonth(revenueByMonth.data);
     setRevenueByRoom(revenueByRoom.data);
     setDataDashBoard(revenue.data);
+    setMostRoomRevenue(getRoomRevenue.data)
     setTotalUser(user.data.length);
     setLoading(false)
   }
-
+  
   const prepareToPreview = () => {
     const _revenue = [];
     const _revenueByMonth = { ...revenueByMonth };
@@ -119,11 +123,45 @@ function Page() {
       return current + pre.total
     }, 0))
     return _revenue;
-  }
 
+    //_revenue.map((item)=>{
+    // _re
+    // })
+  }
   const data = {
     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",],
     datasets: [{
+      data: prepareToPreview(),
+      label: "Năm 2023",
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+      ],
+      borderWidth: 1,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      },
+    },
+    {
+      label: "Năm 2023",
       data: prepareToPreview(),
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -151,45 +189,83 @@ function Page() {
           }
         }
       },
-    }]
+    }
+    ]
   }
   const dataRevenueByRoom = {
     labels: revenueByRoom.map((item: any) => item.name),
-    datasets: [{
-      data: revenueByRoom.map((item: any) => item.total),
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
-      ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
-      ],
-      borderWidth: 1,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    datasets: [
+      {
+        data: revenueByRoom.map((item: any) => item.total),
+        label: 'Năm 2023',
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
-        }
-      },
-    }]
+        },
+      }
+    ]
+  }
+  const dataMostRoomRevenue = {
+    labels: mostRoomRevenue.map((item: any) => item.name),
+    datasets: [
+      {
+        data: mostRoomRevenue.map((item: any) => item.total),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        },
+      }
+    ]
   }
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        display: false
+        display: true
       },
       title: {
         display: true,
@@ -198,10 +274,11 @@ function Page() {
     }
   };
   const options2 = {
-    indexAxis: 'y' as const,
+    indexAxis: 'x' as const,
     responsive: true,
     plugins: {
       legend: {
+        position: 'bottom' as const,
         display: false
       },
       title: {
@@ -223,7 +300,19 @@ function Page() {
       }
     }
   };
-
+  const optionsMostRoomRevenue = {
+    indexAxis: 'x' as const,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: "Danh sách phòng có doanh thu cao"
+      }
+    }
+  };
   const optionsUserHighRevenue = {
     indexAxis: 'y' as const,
     responsive: true,
@@ -345,7 +434,7 @@ function Page() {
             <Bar data={dataRevenueByRoom} options={options2} className='w-[100%]' />
           </div>
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
+            <Bar data={dataMostRoomRevenue} options={optionsMostRoomRevenue} className='w-[100%]' />
           </div>
         </div>
         <div className="flex flex-col sm:flex-row">
