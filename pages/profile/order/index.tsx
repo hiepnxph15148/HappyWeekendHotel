@@ -100,22 +100,24 @@ const Orderlisst = (props: Props) => {
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
                                         Tên phòng
+                                    </th>          
+                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                        Thời gian đặt nhận
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        Ảnh
+                                    Trạng thái
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        Thông tin
+                                    Thông tin
                                     </th>
-                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                    </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 {order?.map((item: OrderUser, index: number) => (
                                     // eslint-disable-next-line react/jsx-key
                                     <tr >
-                                        <td className="py-5 border-b border-gray-200 bg-white text-sm">
+                                        <td className="py-5 border-b border-gray-200 bg-white text-sm mb:block mbs:hidden">
                                             <p className="text-gray-900 whitespace-no-wrap">
                                                 {index + 1}
                                             </p>
@@ -129,14 +131,14 @@ const Orderlisst = (props: Props) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm mb:block mbs:hidden">
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm xl: mbs:hidden">
                                             <p className="text-gray-900 whitespace-no-wrap">
                                                 <img width={100} src={`${item?.room?.image?.[0]}`} alt="" />
                                             </p>
                                         </td>
-                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm mb:block mbs:hidden">
+                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                {item.room?.description}
+                                               <p>{item.checkins}</p> - <p>{item.checkouts}</p>
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">

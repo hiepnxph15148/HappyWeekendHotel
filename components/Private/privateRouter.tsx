@@ -1,3 +1,4 @@
+import { el } from 'date-fns/locale';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { ADMIN_ROLE } from '../../constants';
@@ -20,7 +21,8 @@ const PrivateRouter = ({ acceptRole, children }: PrivateRouterProps) => {
 
     if (!isLogged) {
       router.push("/signin");
-    } else {
+      
+    }else {
       // admin và acceptRole có quyền truy cập.
       const isAllow = getUser.role === ADMIN_ROLE || acceptRole?.includes(getUser.role);
 

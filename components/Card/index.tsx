@@ -35,9 +35,11 @@ export default function ActionAreaCard({ newsList }: props) {
               </CardActionArea>
             </Link>
           </div>
+          
         )
       })}
     </div>
+    
   );
 }
 

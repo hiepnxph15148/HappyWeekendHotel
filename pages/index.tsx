@@ -352,36 +352,40 @@ const Home = () => {
         </form>
       </div>
       <div className="mb:w-[80%] mbs:w-[95%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1>
+        <h1 className='text-3xl font-semibold text-[orange] py-6'>Danh sách các phòng </h1>
         {room.data ? <SimpleSwiper newsList={room.data} /> : skeletonLoadingRoom()}
       </div>
         <div className="mb:w-[80%] mbs:w-[95%] mx-auto pt-2">
-          <p className="text-2xl text-amber-400">Trải nghiệm cùng HappyWeekendHotel</p>
+          <p className="text-2xl text-amber-400 py-6 font-bold">Trải nghiệm cùng HappyWeekendHotel</p>
+      
           <div className="flex justify-between">
-        <a href="#" className="relative"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656566391_62bd327718636.jpg" alt="" /></a>
-       
-            <a href="#" className="relative"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656573947_62bd4ffb3b750.jpg" alt="" /></a>
-        
+            <div>
+        <a href="" className="absolute"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656566391_62bd327718636.jpg" alt="" /></a>
+        <p className=" relative text-slate-100 text-3xl font-bold m-20 tracking-wide flex">Giá sốc 
+        <svg className="text-slate-100" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512"><title>ionicons-v5-m</title><path d="M315.27,33,96,304H224L192.49,477.23a2.36,2.36,0,0,0,2.33,2.77h0a2.36,2.36,0,0,0,1.89-.95L416,208H288L319.66,34.75A2.45,2.45,0,0,0,317.22,32h0A2.42,2.42,0,0,0,315.27,33Z" /></svg>
+        Đêm Nay</p>
+        <h1 className="text-normal font-semibold text-[orange] py-3 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[80px] bg-slate-200 w-[100px] rounded-lg">
+            <Link href="#">Xem thêm</Link>
+              
+               
+            </h1>
+        </div>
+              <p className="mb:flex mbs:hidden">
+              <a href="#"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656573947_62bd4ffb3b750.jpg" alt="" /></a>
+              </p>
+            
         </div> 
         </div>
       {/* list news */}
       <div className="py-8">
         <div className="w-[80%] mx-auto">
           <div className="flex justify-between items-center ">
-            <h1 className=" relative "><img className="rounded-lg" src="https://s3.go2joy.vn/1000w/cover_photo/33_14148447441.jpg" alt="" /></h1>
-            <h1 className="absolute pb-20 ml-[40px] text-white text-2xl mb:pb-20 ml-[40px] mbs:pb-10 ml-[20px]">Những điều thú vị có thể bạn chưa biết</h1>
-            <h1 className="text-normal font-semibold text-[orange] py-2 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[40px] bg-slate-200 w-[100px] rounded-lg mbs: mb:mt-[60px] ml-[20px] w-[100px] h-[30px]">
-            <Link href="/blog">Xem thêm</Link>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4 group-hover:translate-x-[10px] duration-300"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
+            <h1 className="relative"><img className="rounded-lg" src="https://s3.go2joy.vn/1000w/cover_photo/33_14148447441.jpg" alt="" /></h1>
+            <h1 className="absolute pb-20 ml-[40px] text-white text-3xl mb:pb-20 ml-[40px] mbs:pb-10 ml-[20px] font-bold mb:text-3xl mbs:text-xl">Những điều thú vị có thể bạn chưa biết</h1>
+            <h1 className="text-normal font-semibold text-[orange] py-6 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[40px] bg-slate-200 w-[200px] rounded-lg mbs: mb:mt-[60px] ml-[20px] w-[100px] py-2 h-[30px]">
+            <Link href="/blog">Danh sách các bài blog</Link>
+              
+               
             </h1>
           </div>
           <ActionAreaCard
