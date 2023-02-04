@@ -34,7 +34,7 @@ function Page() {
   const [loading, setLoading] = useState(false)
   const [dataDashBoard, setDataDashBoard] = useState([])
   const [totalUser, setTotalUser] = useState([])
-  const [revenueByMonth, setRevenueByMonth] = useState<any>({})
+  const [revenueByMonth, setRevenueByMonth] = useState<any>([])
   const [mostRoomRevenue, setMostRoomRevenue] = useState<any>([])
   const [revenueByRoom, setRevenueByRoom] = useState<any>([])
   const defaultCondition = {
@@ -82,57 +82,63 @@ function Page() {
     setTotalUser(user.data.length);
     setLoading(false)
   }
-  
-  const prepareToPreview = () => {
-    const _revenue = [];
-    const _revenueByMonth = { ...revenueByMonth };
-    _revenue.push(_revenueByMonth.jan?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.feb?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.mar?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.apr?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.may?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.jun?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.jul?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.aug?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.sep?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.oct?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.nov?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    _revenue.push(_revenueByMonth.dec?.reduce((current: any, pre: any) => {
-      return current + pre.total
-    }, 0))
-    return _revenue;
 
-    //_revenue.map((item)=>{
-    // _re
-    // })
-  }
+  // const prepareToPreview = () => {
+  //   const _revenue = [];
+  //   console.log(revenueByMonth);
+    
+  //   revenueByMonth.map((item: any, index: any) => {
+  //     // _revenue.push( item.jan.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.feb.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.mar.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.apr.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.may.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.jun.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.jul.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.aug.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.sep.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.oct.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.nov.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //     // _revenue.push( item.dec.reduce((current: any, pre: any) => {
+  //     //   return current + pre.total
+  //     // }, 0))
+  //   })
+    
+  //   return _revenue;
+
+  //   //_revenue.map((item)=>{
+  //   // _re
+  //   // })
+  // }
+  console.log(revenueByMonth);
+  let year = new Date().getFullYear();
   const data = {
     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",],
     datasets: [{
-      data: prepareToPreview(),
-      label: "Năm 2023",
+      data: revenueByMonth[year-1]?.map((item: any)=>item.total),
+      label: year - 1,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(255, 159, 64, 0.2)',
@@ -161,8 +167,8 @@ function Page() {
       },
     },
     {
-      label: "Năm 2023",
-      data: prepareToPreview(),
+      label: year,
+      data: revenueByMonth[year]?.map((item: any)=>item.total),
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(255, 159, 64, 0.2)',
