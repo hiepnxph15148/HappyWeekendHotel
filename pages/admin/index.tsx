@@ -299,7 +299,7 @@ function Page() {
               </select>
             </div>
           </div>
-          <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
+          {/* <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
             <p className='backdrop-blur-xl p-4 bg-white/30 rounded-full'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
@@ -311,8 +311,8 @@ function Page() {
             }, 0))}</p>
             <span>Phòng đang được sử dụng</span>
 
-          </div>
-          <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+          </div> */}
+          {/* <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-orange-500 to-red-500 text-white">
             <p className='backdrop-blur-xl p-4 bg-white/30 rounded-full'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6A2.25 2.25 0 016 3.75h1.5m9 0h-9" />
@@ -324,7 +324,7 @@ function Page() {
             }, 0))}</p>
             <span>Phòng trống</span>
 
-          </div>
+          </div> */}
           <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
             <p className='backdrop-blur-xl p-4 bg-white/30 rounded-full'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -346,16 +346,16 @@ function Page() {
           </div>
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
             <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
-          </div>
+          </div>{/*  */}
         </div>
-        <div className="flex flex-col sm:flex-row">
+        {/* <div className="flex flex-col sm:flex-row">
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
             <Bar data={data} options={optionsUserHighRevenue} className='w-[100%]' />
           </div>
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
             <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )

@@ -364,11 +364,11 @@ const Home = () => {
         <p className=" relative text-slate-100 text-3xl font-bold m-20 tracking-wide flex">Giá sốc 
         <svg className="text-slate-100" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512"><title>ionicons-v5-m</title><path d="M315.27,33,96,304H224L192.49,477.23a2.36,2.36,0,0,0,2.33,2.77h0a2.36,2.36,0,0,0,1.89-.95L416,208H288L319.66,34.75A2.45,2.45,0,0,0,317.22,32h0A2.42,2.42,0,0,0,315.27,33Z" /></svg>
         Đêm Nay</p>
-        <h1 className="text-normal font-semibold text-[orange] py-3 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[80px] bg-slate-200 w-[100px] rounded-lg">
+        {/* <h1 className="text-normal font-semibold text-[orange] py-3 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[80px] bg-slate-200 w-[100px] rounded-lg">
             <Link href="#">Xem thêm</Link>
               
                
-            </h1>
+            </h1> */}
         </div>
               <p className="mb:flex mbs:hidden">
               <a href="#"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656573947_62bd4ffb3b750.jpg" alt="" /></a>
