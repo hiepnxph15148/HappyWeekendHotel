@@ -37,6 +37,8 @@ function Page() {
   const [revenueByMonth, setRevenueByMonth] = useState<any>([])
   const [mostRoomRevenue, setMostRoomRevenue] = useState<any>([])
   const [revenueByRoom, setRevenueByRoom] = useState<any>([])
+  const [usersOftenCancels, setUsersOftenCancels] = useState<any>([])
+  const [mostUserRevenues, setMostUserRevenues] = useState<any>([])
   const defaultCondition = {
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear()
@@ -75,127 +77,82 @@ function Page() {
     const revenueByMonth = await axios.post("http://localhost:4000/api/revenueByMonth");
     const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom");
     const getRoomRevenue = await axios.post("http://localhost:4000/api/getRoomRevenue");
+    const getOftenCancels = await axios.post("http://localhost:4000/api/usersOftenCancel");
+    const getMostUserRevenues = await axios.post("http://localhost:4000/api/mostUserRevenues");
     setRevenueByMonth(revenueByMonth.data);
     setRevenueByRoom(revenueByRoom.data);
     setDataDashBoard(revenue.data);
     setMostRoomRevenue(getRoomRevenue.data)
+    setUsersOftenCancels(getOftenCancels.data)
+    setMostUserRevenues(getMostUserRevenues.data)
     setTotalUser(user.data.length);
     setLoading(false)
   }
 
-  // const prepareToPreview = () => {
-  //   const _revenue = [];
-  //   console.log(revenueByMonth);
-    
-  //   revenueByMonth.map((item: any, index: any) => {
-  //     // _revenue.push( item.jan.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.feb.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.mar.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.apr.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.may.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.jun.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.jul.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.aug.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.sep.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.oct.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.nov.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //     // _revenue.push( item.dec.reduce((current: any, pre: any) => {
-  //     //   return current + pre.total
-  //     // }, 0))
-  //   })
-    
-  //   return _revenue;
-
-  //   //_revenue.map((item)=>{
-  //   // _re
-  //   // })
-  // }
-  console.log(revenueByMonth);
   let year = new Date().getFullYear();
   const data = {
     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",],
-    datasets: [{
-      data: revenueByMonth[year-1]?.map((item: any)=>item.total),
-      label: year - 1,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
-      ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
-      ],
-      borderWidth: 1,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    datasets: [
+      {
+        data: revenueByMonth[+year - 1]?.map((item: any) => item.total),
+        label: year - 1,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
-        }
+        },
       },
-    },
-    {
-      label: year,
-      data: revenueByMonth[year]?.map((item: any)=>item.total),
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
-      ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
-      ],
-      borderWidth: 1,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+      {
+        label: year,
+        data: revenueByMonth[year]?.map((item: any) => item.total),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
-        }
-      },
-    }
+        },
+      }
     ]
   }
   const dataRevenueByRoom = {
@@ -238,6 +195,74 @@ function Page() {
     datasets: [
       {
         data: mostRoomRevenue.map((item: any) => item.total),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        },
+      }
+    ]
+  }
+  const datauUsersOftenCancel = {
+    labels: usersOftenCancels.map((item: any) => item.name),
+    datasets: [
+      {
+        data: usersOftenCancels.map((item: any) => item.total),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        },
+      }
+    ]
+  }
+  const dataMostUserRevenue = {
+    labels: mostUserRevenues.map((item: any) => item.name),
+    datasets: [
+      {
+        data: mostUserRevenues.map((item: any) => item.total),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 159, 64, 0.2)',
@@ -320,7 +345,7 @@ function Page() {
     }
   };
   const optionsUserHighRevenue = {
-    indexAxis: 'y' as const,
+    indexAxis: 'x' as const,
     responsive: true,
     plugins: {
       legend: {
@@ -329,6 +354,19 @@ function Page() {
       title: {
         display: true,
         text: "Danh sách khách hàng thân thiết"
+      }
+    }
+  };
+  const usersOftenCancel = {
+    indexAxis: 'x' as const,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: "Danh sách khách hàng thường hủy phòng"
       }
     }
   };
@@ -356,7 +394,7 @@ function Page() {
             <p className='text-2xl'>{numberWithCommas(dataDashBoard.reduce((pre, cur: any) => {
               return pre + cur.total || 0
             }, 0))} VND</p>
-            <span>Doanh thu</span>
+            <span>Doanh thu năm</span>
 
             <div className="absolute p-2 cursor-pointer w-full flex justify-center bg-white text-black invisible translate-y-[50px] opacity-0 duration-300 group-hover:visible group-hover:opacity-100 group-hover:translate-y-[0px]">
               <select
@@ -445,10 +483,10 @@ function Page() {
         </div>
         <div className="flex flex-col sm:flex-row">
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={data} options={optionsUserHighRevenue} className='w-[100%]' />
+            <Bar data={dataMostUserRevenue} options={optionsUserHighRevenue} className='w-[100%]' />
           </div>
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
+            <Bar data={datauUsersOftenCancel} options={usersOftenCancel} className='w-[100%]' />
           </div>
         </div>
       </div>
