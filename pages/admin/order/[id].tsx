@@ -186,20 +186,20 @@ const DetailOrder = (props: Props) => {
             </div>
             <div className="flex">
               <div>
-                <span className="text-[18px] font-medium">Thời gian CkeckIn</span> :
+                <span className="text-[18px] font-medium">Thời gian CheckIn</span> :
                 <div className="ml-[20px] mt-[20px]">
                   <span>Giờ:</span> {dayjs(order?.order.checkins).format("HH:mm")} <br />
                   <span>Ngày:</span> {dayjs(order?.order.checkins).format("DD/MM/YYYY")}
                 </div>
               </div>
               <div className="ml-[30px]">
-                <span className="text-[18px] font-medium">Thời gian CkeckOut :</span>
+                <span className="text-[18px] font-medium">Thời gian CheckOut :</span>
                 <div className="ml-[20px] mt-[20px]">
                   <span>Giờ:</span> {dayjs(order?.order.checkouts).format("HH:mm")} <br />
                   <span>Ngày:</span> {dayjs(order?.order.checkouts).format("DD/MM/YYYY")}
                 </div>
               </div>
-              <div className="ml-[30px]">
+              {/* <div className="ml-[30px]">
                 <h1 className="text-[18px] font-medium">Tiện ích</h1>
                 <div className="grid grid-cols-2 gap-4 mt-[10px]">
                   {facilities?.map((item: any, index: number) => (
@@ -209,7 +209,7 @@ const DetailOrder = (props: Props) => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

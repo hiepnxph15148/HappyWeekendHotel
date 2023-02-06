@@ -71,7 +71,7 @@ const Signin = (props: Props) => {
                   <label htmlFor="remember-me" className="ml-2 block text-sm text-[#FFA500]">Remember me</label>
                 </div>
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-[#BDBDBD] hover:text-indigo-500">No account?  <span className='text-[#28CDBA]'>Sign Up</span></a>
+                  <a href="/signup" className="font-medium text-[#BDBDBD] hover:text-indigo-500">No account?  <span className='text-[#28CDBA]'>Sign Up</span></a>
                 </div>
               </div>
               <div>
