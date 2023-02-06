@@ -14,6 +14,7 @@ import { getOnefac } from "../../../api/facilities";
 import { API_URL } from "../../../constants";
 import ProfileLayout from "../../../components/Layout/ProfileLayout";
 import dayjs from "dayjs";
+import { bangking } from "../../../api/banking";
 
 type Props = {};
 
@@ -288,20 +289,20 @@ const DtailOrderHistory = (props: Props) => {
                 <div>
                   {methodPay(orders?.order.methodpay)}
                 </div>
-                <div className="flex mt-[30px]">
+                <div className="flex mt-[30px] mr-[20px]">
                   <div>
-                    <Button
+                    {orders?.order.statusorder > 2 ? (<Button
                       label="Đặt lại"
                       className="p-button-outlined p-button-info"
                       onClick={() => {
                         router.push(`/booking_detail/${orders?.room[0].slug}`);
                       }}
-                    />
+                    />) : ""}
                   </div>
-                  <div className="mx-[20px]">
+                  <div className="mr-[20px]">
                     {orders?.order.statusorder < 2 ? (
                       <Button
-                        label="Hủy Phòng"
+                        label="Hủy"
                         className="p-button-outlined p-button-danger"
                         onClick={() => {
                           onsubmit();
@@ -311,6 +312,21 @@ const DtailOrderHistory = (props: Props) => {
                       ""
                     )}
                   </div>
+                  {orders?.order.statusorder < 1 && orders?.order.methodpay == "1" ? (<Button
+                    label="Thanh toán"
+                    className="p-button-outlined p-button-success"
+                    onClick={() => {
+                      const { id } = router.query;
+                      bangking({
+                        'id_order': id,
+                        "total": orders?.order.total,
+                        "orderDescription": "",
+                        "orderType": "billpayment",
+                        "language": "vn",
+                        "bankCode": ""
+                      }).then((res: any) => { router.push(`${res.redirect}`) })
+                    }}
+                  />) : ""}
                 </div>
               </div>
             </div>

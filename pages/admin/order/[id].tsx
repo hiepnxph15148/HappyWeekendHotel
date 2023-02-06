@@ -170,6 +170,23 @@ const DetailOrder = (props: Props) => {
     const tempCurrency = +currency >= 0 ? currency : 0;
     return new Intl.NumberFormat("de-DE", { style: "currency", currency: "VND" }).format(tempCurrency);
   };
+
+
+  const methodPay = (key: string) => {
+    if (key == "0") {
+      return <div>
+        Phương thức:  <span>Thanh toán trực tiếp</span>
+      </div>
+    } else if (key == "1") {
+      return <div>
+        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Chưa thanh toán</span>
+      </div>
+    } else if (key == "2") {
+      return <div>
+        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Đã thanh toán</span>
+      </div>
+    }
+  }
   return (
     <div>
       <div className="flex">
@@ -251,6 +268,9 @@ const DetailOrder = (props: Props) => {
               <div className="py-[10px]">
                 <label className="font-medium">Status Booking: </label>
                 <span className="float-right">{statuss(order?.order.statusorder)}</span>
+              </div>
+              <div>
+                {methodPay(order?.order.methodpay)}
               </div>
               <form action="" className="flex mt-[30px]" onSubmit={handleSubmit(onsubmit)}>
                 <div className="">{updateStatus(order?.order)} </div>
