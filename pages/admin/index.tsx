@@ -1,11 +1,12 @@
 import Head from 'next/head';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Button, ButtonGroup, ClickAwayListener, Container, Grid, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import { Budget } from '../../components/dashboard/budget';
 import { TasksProgress } from '../../components/dashboard/tasks-progress';
 import { TotalCustomers } from '../../components/dashboard/total-customers';
 import { TotalProfit } from '../../components/dashboard/total-profit';
 import { DashboardLayout } from '../../components/dashboard-layout';
 import LinearProgress from '@mui/material/LinearProgress';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -17,10 +18,11 @@ import {
   Legend
 
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isFirstDayOfMonth } from 'date-fns/fp';
 import axios from 'axios';
 import { log } from 'console';
+import useSWR from 'swr';
 ChartJS.register(
   BarElement,
   CategoryScale,
@@ -39,9 +41,14 @@ function Page() {
   const [revenueByRoom, setRevenueByRoom] = useState<any>([])
   const [usersOftenCancels, setUsersOftenCancels] = useState<any>([])
   const [mostUserRevenues, setMostUserRevenues] = useState<any>([])
+  const [type, setType] = useState("QUATER")
+  const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const anchorRef = useRef<HTMLDivElement>(null);
   const defaultCondition = {
     month: new Date().getMonth() + 1,
-    year: new Date().getFullYear()
+    year: new Date().getFullYear(),
+    type: type
   }
   const [condition, setCondition] = useState(defaultCondition);
   const time = new Date().getHours()
@@ -292,7 +299,7 @@ function Page() {
       }
     ]
   }
-  const options = {
+  const optionss = {
     responsive: true,
     plugins: {
       legend: {
@@ -370,7 +377,41 @@ function Page() {
       }
     }
   };
+  const options = ['Tháng', 'Quý', 'Năm'];
 
+  const handleMenuItemClick = (
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
+    index: number,
+  ) => {
+    let _defaultCondition = {...defaultCondition};
+    if (index == 0) {
+      _defaultCondition.type = "MONTH"
+    }
+    if (index == 1) {
+      _defaultCondition.type = "QUATER";
+    }
+    if(index == 2) {
+      _defaultCondition.type = "YEAR";
+    }
+    setCondition(_defaultCondition)
+    setSelectedIndex(index);
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event: Event) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <>
       {loading ? <LinearProgress className='fixed top-[65px] z-50 w-full' /> : <></>}
@@ -394,42 +435,58 @@ function Page() {
             <p className='text-2xl'>{numberWithCommas(dataDashBoard.reduce((pre, cur: any) => {
               return pre + cur.total || 0
             }, 0))} VND</p>
-            <span>Doanh thu năm</span>
+            <span>Doanh thu {options[selectedIndex]}</span>
 
-            <div className="absolute p-2 cursor-pointer w-full flex justify-center bg-white text-black invisible translate-y-[50px] opacity-0 duration-300 group-hover:visible group-hover:opacity-100 group-hover:translate-y-[0px]">
-              <select
-                value={condition.month}
-                onChange={(e) => {
-                  let _condition = { ...condition };
-                  _condition.month = +e.target.value
-                  setCondition(_condition)
-                }}>
-                <option>--</option>
-                <option value="1">Tháng 1</option>
-                <option value="2">Tháng 2</option>
-                <option value="3">Tháng 3</option>
-                <option value="4">Tháng 4</option>
-                <option value="5">Tháng 5</option>
-                <option value="6">Tháng 6</option>
-                <option value="7">Tháng 7</option>
-                <option value="8">Tháng 8</option>
-                <option value="9">Tháng 9</option>
-                <option value="10">Tháng 10</option>
-                <option value="11">Tháng 11</option>
-                <option value="12">Tháng 12</option>
-              </select>
-
-              <select
-                value={condition.year}
-                onChange={(e) => {
-                  let _condition = { ...condition };
-                  _condition.year = +e.target.value
-                  setCondition(_condition)
-                }}>
-                <option >--</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-              </select>
+            <div className="absolute p-2 cursor-pointer w-full flex justify-center text-black invisible translate-y-[50px] opacity-0 duration-300 group-hover:visible group-hover:opacity-100 group-hover:translate-y-[0px]">
+              <ButtonGroup variant="outlined" className='bg-white' ref={anchorRef} aria-label="split button">
+                <Button onClick={handleToggle}>{options[selectedIndex]}</Button>
+                <Button
+                  size="small"
+                  aria-controls={open ? 'split-button-menu' : undefined}
+                  aria-expanded={open ? 'true' : undefined}
+                  aria-label="select merge strategy"
+                  aria-haspopup="menu"
+                  onClick={handleToggle}
+                >
+                  <ArrowDropDownIcon />
+                </Button>
+              </ButtonGroup>
+              <Popper
+                sx={{
+                  zIndex: 1,
+                }}
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === 'bottom' ? 'center top' : 'center bottom',
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList id="split-button-menu" autoFocusItem>
+                          {options.map((option, index) => (
+                            <MenuItem
+                              key={option}
+                              selected={index === selectedIndex}
+                              onClick={(event) => handleMenuItemClick(event, index)}
+                            >
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
             </div>
           </div>
           <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
@@ -471,7 +528,7 @@ function Page() {
           </div>
         </div>
         <div className='m-4 p-2 bg-white rounded-xl shadow-xl'>
-          <Bar data={data} options={options} className='w-[100%]' />
+          <Bar data={data} options={optionss} className='w-[100%]' />
         </div>
         <div className="flex flex-col sm:flex-row">
           <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
