@@ -80,7 +80,7 @@ function Page() {
     load();
     const initMonth = () => {
       let arrMonth = [];
-      for (let i = 0; i < conditionBottomBar.month; i++) {
+      for (let i = 0; i < new Date().getMonth()+1; i++) {
         arrMonth.push(i)
       }
       setConditionMonth(arrMonth);
@@ -106,7 +106,7 @@ function Page() {
     setTotalUser(user.data.length);
     setLoading(false)
   }
-
+  
   let year = new Date().getFullYear();
   const data = {
     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",],
