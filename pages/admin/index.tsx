@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Button, ButtonGroup, ClickAwayListener, Container, Grid, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
+import { Box, Button, ButtonGroup, ClickAwayListener, Container, FormControl, Grid, Grow, InputLabel, MenuItem, MenuList, Paper, Popper, Select } from '@mui/material';
 import { Budget } from '../../components/dashboard/budget';
 import { TasksProgress } from '../../components/dashboard/tasks-progress';
 import { TotalCustomers } from '../../components/dashboard/total-customers';
@@ -8,6 +8,7 @@ import { DashboardLayout } from '../../components/dashboard-layout';
 import LinearProgress from '@mui/material/LinearProgress';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Bar } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   BarElement,
@@ -36,21 +37,24 @@ function Page() {
   const [loading, setLoading] = useState(false)
   const [dataDashBoard, setDataDashBoard] = useState([])
   const [totalUser, setTotalUser] = useState([])
-  const [revenueByMonth, setRevenueByMonth] = useState<any>({})
+  const [revenueByMonth, setRevenueByMonth] = useState<any>([])
+  const [mostRoomRevenue, setMostRoomRevenue] = useState<any>([])
   const [revenueByRoom, setRevenueByRoom] = useState<any>([])
   const [usersOftenCancels, setUsersOftenCancels] = useState<any>([])
   const [mostUserRevenues, setMostUserRevenues] = useState<any>([])
   const [type, setType] = useState("QUATER")
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [conditionMonth, setConditionMonth] = useState([]);
   const anchorRef = useRef<HTMLDivElement>(null);
+  const time = new Date().getHours();
   const defaultCondition = {
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
     type: type
   }
   const [condition, setCondition] = useState(defaultCondition);
-  const time = new Date().getHours()
+  const [conditionBottomBar, setConditionBottomBar] = useState({ month: new Date().getMonth() + 1 });
   function numberWithCommas(x: any) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
@@ -73,18 +77,26 @@ function Page() {
   }, [time])
 
   useEffect(() => {
-    load()
-  }, [condition])
+    load();
+    const initMonth = () => {
+      let arrMonth = [];
+      for (let i = 0; i < conditionBottomBar.month; i++) {
+        arrMonth.push(i)
+      }
+      setConditionMonth(arrMonth);
+    }
+    initMonth();
+  }, [condition, conditionBottomBar])
 
   const load = async () => {
     setLoading(true)
     const revenue = await axios.post("http://localhost:4000/api/revenue", condition);
     const user = await axios.get("http://localhost:4000/api/users");
     const revenueByMonth = await axios.post("http://localhost:4000/api/revenueByMonth");
-    const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom");
-    const getRoomRevenue = await axios.post("http://localhost:4000/api/getRoomRevenue");
-    const getOftenCancels = await axios.post("http://localhost:4000/api/usersOftenCancel");
-    const getMostUserRevenues = await axios.post("http://localhost:4000/api/mostUserRevenues");
+    const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom", conditionBottomBar);
+    const getRoomRevenue = await axios.post("http://localhost:4000/api/getRoomRevenue", conditionBottomBar);
+    const getOftenCancels = await axios.post("http://localhost:4000/api/usersOftenCancel", conditionBottomBar);
+    const getMostUserRevenues = await axios.post("http://localhost:4000/api/mostUserRevenues", conditionBottomBar);
     setRevenueByMonth(revenueByMonth.data);
     setRevenueByRoom(revenueByRoom.data);
     setDataDashBoard(revenue.data);
@@ -163,35 +175,72 @@ function Page() {
   }
   const dataRevenueByRoom = {
     labels: revenueByRoom.map((item: any) => item.name),
-    datasets: [{
-      data: revenueByRoom.map((item: any) => item.total),
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(201, 203, 207, 0.2)'
-      ],
-      borderColor: [
-        'rgb(255, 99, 132)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        'rgb(75, 192, 192)',
-        'rgb(54, 162, 235)',
-        'rgb(153, 102, 255)',
-        'rgb(201, 203, 207)'
-      ],
-      borderWidth: 1,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    datasets: [
+      {
+        data: revenueByRoom.map((item: any) => item.total),
+        label: 'Năm 2023',
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
-        }
-      },
-    }]
+        },
+      }
+    ]
+  }
+  const dataMostRoomRevenue = {
+    labels: mostRoomRevenue.map((item: any) => item.name),
+    datasets: [
+      {
+        data: mostRoomRevenue.map((item: any) => item.total),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        },
+      }
+    ]
   }
   const datauUsersOftenCancel = {
     labels: usersOftenCancels.map((item: any) => item.name),
@@ -265,7 +314,7 @@ function Page() {
     responsive: true,
     plugins: {
       legend: {
-        display: false
+        display: true
       },
       title: {
         display: true,
@@ -274,10 +323,11 @@ function Page() {
     }
   };
   const options2 = {
-    indexAxis: 'y' as const,
+    indexAxis: 'x' as const,
     responsive: true,
     plugins: {
       legend: {
+        position: 'bottom' as const,
         display: false
       },
       title: {
@@ -299,7 +349,19 @@ function Page() {
       }
     }
   };
-
+  const optionsMostRoomRevenue = {
+    indexAxis: 'x' as const,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: "Danh sách phòng có doanh thu cao"
+      }
+    }
+  };
   const optionsUserHighRevenue = {
     indexAxis: 'x' as const,
     responsive: true,
@@ -332,14 +394,14 @@ function Page() {
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number,
   ) => {
-    let _defaultCondition = {...defaultCondition};
+    let _defaultCondition = { ...defaultCondition };
     if (index == 0) {
       _defaultCondition.type = "MONTH"
     }
     if (index == 1) {
       _defaultCondition.type = "QUATER";
     }
-    if(index == 2) {
+    if (index == 2) {
       _defaultCondition.type = "YEAR";
     }
     setCondition(_defaultCondition)
@@ -361,6 +423,7 @@ function Page() {
 
     setOpen(false);
   };
+
   return (
     <>
       {loading ? <LinearProgress className='fixed top-[65px] z-50 w-full' /> : <></>}
@@ -438,7 +501,7 @@ function Page() {
               </Popper>
             </div>
           </div>
-          {/* <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
+          <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
             <p className='backdrop-blur-xl p-4 bg-white/30 rounded-full'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
@@ -450,8 +513,8 @@ function Page() {
             }, 0))}</p>
             <span>Phòng đang được sử dụng</span>
 
-          </div> */}
-          {/* <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+          </div>
+          <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-orange-500 to-red-500 text-white">
             <p className='backdrop-blur-xl p-4 bg-white/30 rounded-full'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6A2.25 2.25 0 016 3.75h1.5m9 0h-9" />
@@ -463,7 +526,7 @@ function Page() {
             }, 0))}</p>
             <span>Phòng trống</span>
 
-          </div> */}
+          </div>
           <div className="flex items-center justify-center flex-col rounded-xl shadow-xl p-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white">
             <p className='backdrop-blur-xl p-4 bg-white/30 rounded-full'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -479,22 +542,54 @@ function Page() {
         <div className='m-4 p-2 bg-white rounded-xl shadow-xl'>
           <Bar data={data} options={optionss} className='w-[100%]' />
         </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={dataRevenueByRoom} options={options2} className='w-[100%]' />
+        <div className="relative p-4 bg-[#ddd] rounded-xl shadow-xl">
+          <FormControl fullWidth className='bg-white rounded-md'>
+            <InputLabel variant='standard' id="demo-simple-select-label"></InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={conditionBottomBar.month}
+              label="Age"
+              onChange={(e) => {
+                let _conditionBottomBar = { ...conditionBottomBar };
+                _conditionBottomBar.month = e.target.value.toString();
+                setConditionBottomBar(_conditionBottomBar);
+              }}
+            >
+              {conditionMonth.map((item: any, index: any) => {
+                return <MenuItem key={index} value={item + 1}>Tháng {item + 1}</MenuItem>
+              })}
+              {/* <MenuItem value={1}>Tháng 1</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 2} value={2}>Tháng 2</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 3} value={3}>Tháng 3</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 4} value={4}>Tháng 4</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 5} value={5}>Tháng 5</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 6} value={6}>Tháng 6</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 7} value={7}>Tháng 7</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 8} value={8}>Tháng 8</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 9} value={9}>Tháng 9</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 10} value={10}>Tháng 10</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 11} value={11}>Tháng 11</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 12} value={12}>Tháng 12</MenuItem> */}
+            </Select>
+          </FormControl>
+          <div className="flex flex-col sm:flex-row">
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={dataRevenueByRoom} options={options2} className='w-[100%]' />
+            </div>
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={dataMostRoomRevenue} options={optionsMostRoomRevenue} className='w-[100%]' />
+            </div>
           </div>
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
-          </div>{/*  */}
+          <div className="flex flex-col sm:flex-row">
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={dataMostUserRevenue} options={optionsUserHighRevenue} className='w-[100%]' />
+            </div>
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={datauUsersOftenCancel} options={usersOftenCancel} className='w-[100%]' />
+            </div>
+          </div>
         </div>
-        {/* <div className="flex flex-col sm:flex-row">
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={dataMostUserRevenue} options={optionsUserHighRevenue} className='w-[100%]' />
-          </div>
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={datauUsersOftenCancel} options={usersOftenCancel} className='w-[100%]' />
-          </div>
-        </div> */}
       </div>
     </>
   )
