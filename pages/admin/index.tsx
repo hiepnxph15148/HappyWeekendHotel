@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Button, ButtonGroup, ClickAwayListener, Container, Grid, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
+import { Box, Button, ButtonGroup, ClickAwayListener, Container, FormControl, Grid, Grow, InputLabel, MenuItem, MenuList, Paper, Popper, Select } from '@mui/material';
 import { Budget } from '../../components/dashboard/budget';
 import { TasksProgress } from '../../components/dashboard/tasks-progress';
 import { TotalCustomers } from '../../components/dashboard/total-customers';
@@ -8,6 +8,7 @@ import { DashboardLayout } from '../../components/dashboard-layout';
 import LinearProgress from '@mui/material/LinearProgress';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Bar } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   BarElement,
@@ -44,14 +45,16 @@ function Page() {
   const [type, setType] = useState("QUATER")
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [conditionMonth, setConditionMonth] = useState([]);
   const anchorRef = useRef<HTMLDivElement>(null);
+  const time = new Date().getHours();
   const defaultCondition = {
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
     type: type
   }
   const [condition, setCondition] = useState(defaultCondition);
-  const time = new Date().getHours()
+  const [conditionBottomBar, setConditionBottomBar] = useState({ month: new Date().getMonth() + 1 });
   function numberWithCommas(x: any) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
@@ -74,18 +77,26 @@ function Page() {
   }, [time])
 
   useEffect(() => {
-    load()
-  }, [condition])
+    load();
+    const initMonth = () => {
+      let arrMonth = [];
+      for (let i = 0; i < conditionBottomBar.month; i++) {
+        arrMonth.push(i)
+      }
+      setConditionMonth(arrMonth);
+    }
+    initMonth();
+  }, [condition, conditionBottomBar])
 
   const load = async () => {
     setLoading(true)
     const revenue = await axios.post("http://localhost:4000/api/revenue", condition);
     const user = await axios.get("http://localhost:4000/api/users");
     const revenueByMonth = await axios.post("http://localhost:4000/api/revenueByMonth");
-    const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom");
-    const getRoomRevenue = await axios.post("http://localhost:4000/api/getRoomRevenue");
-    const getOftenCancels = await axios.post("http://localhost:4000/api/usersOftenCancel");
-    const getMostUserRevenues = await axios.post("http://localhost:4000/api/mostUserRevenues");
+    const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom", conditionBottomBar);
+    const getRoomRevenue = await axios.post("http://localhost:4000/api/getRoomRevenue", conditionBottomBar);
+    const getOftenCancels = await axios.post("http://localhost:4000/api/usersOftenCancel", conditionBottomBar);
+    const getMostUserRevenues = await axios.post("http://localhost:4000/api/mostUserRevenues", conditionBottomBar);
     setRevenueByMonth(revenueByMonth.data);
     setRevenueByRoom(revenueByRoom.data);
     setDataDashBoard(revenue.data);
@@ -383,14 +394,14 @@ function Page() {
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number,
   ) => {
-    let _defaultCondition = {...defaultCondition};
+    let _defaultCondition = { ...defaultCondition };
     if (index == 0) {
       _defaultCondition.type = "MONTH"
     }
     if (index == 1) {
       _defaultCondition.type = "QUATER";
     }
-    if(index == 2) {
+    if (index == 2) {
       _defaultCondition.type = "YEAR";
     }
     setCondition(_defaultCondition)
@@ -412,6 +423,7 @@ function Page() {
 
     setOpen(false);
   };
+
   return (
     <>
       {loading ? <LinearProgress className='fixed top-[65px] z-50 w-full' /> : <></>}
@@ -530,20 +542,52 @@ function Page() {
         <div className='m-4 p-2 bg-white rounded-xl shadow-xl'>
           <Bar data={data} options={optionss} className='w-[100%]' />
         </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={dataRevenueByRoom} options={options2} className='w-[100%]' />
+        <div className="relative p-4 bg-[#ddd] rounded-xl shadow-xl">
+          <FormControl fullWidth className='bg-white rounded-md'>
+            <InputLabel variant='standard' id="demo-simple-select-label"></InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={conditionBottomBar.month}
+              label="Age"
+              onChange={(e) => {
+                let _conditionBottomBar = { ...conditionBottomBar };
+                _conditionBottomBar.month = e.target.value.toString();
+                setConditionBottomBar(_conditionBottomBar);
+              }}
+            >
+              {conditionMonth.map((item: any, index: any) => {
+                return <MenuItem key={index} value={item + 1}>Tháng {item + 1}</MenuItem>
+              })}
+              {/* <MenuItem value={1}>Tháng 1</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 2} value={2}>Tháng 2</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 3} value={3}>Tháng 3</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 4} value={4}>Tháng 4</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 5} value={5}>Tháng 5</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 6} value={6}>Tháng 6</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 7} value={7}>Tháng 7</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 8} value={8}>Tháng 8</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 9} value={9}>Tháng 9</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 10} value={10}>Tháng 10</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 11} value={11}>Tháng 11</MenuItem>
+              <MenuItem disabled={conditionBottomBar.month > 12} value={12}>Tháng 12</MenuItem> */}
+            </Select>
+          </FormControl>
+          <div className="flex flex-col sm:flex-row">
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={dataRevenueByRoom} options={options2} className='w-[100%]' />
+            </div>
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={dataMostRoomRevenue} options={optionsMostRoomRevenue} className='w-[100%]' />
+            </div>
           </div>
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={dataMostRoomRevenue} options={optionsMostRoomRevenue} className='w-[100%]' />
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={dataMostUserRevenue} options={optionsUserHighRevenue} className='w-[100%]' />
-          </div>
-          <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
-            <Bar data={datauUsersOftenCancel} options={usersOftenCancel} className='w-[100%]' />
+          <div className="flex flex-col sm:flex-row">
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={dataMostUserRevenue} options={optionsUserHighRevenue} className='w-[100%]' />
+            </div>
+            <div className='m-2 bg-white rounded-xl shadow-xl basis-1/2'>
+              <Bar data={datauUsersOftenCancel} options={usersOftenCancel} className='w-[100%]' />
+            </div>
           </div>
         </div>
       </div>
