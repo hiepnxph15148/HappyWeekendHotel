@@ -13,16 +13,17 @@ type props = {
     id: string;
     getDate: any;
     settotaldate: any;
+    disabled: any
 }
 
-export default function BasicDateRangePicker({ id, getDate, settotaldate }: props) {
+export default function BasicDateRangePicker({ id, getDate, settotaldate, disabled }: props) {
     const defaultSelectedDate = useMemo(() => {
         const currentDate = new Date();
         const futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
-        
+
         return [dayjs(currentDate.toISOString()), dayjs(futureDate.toISOString())];
     }, []);
-    
+
     const [selectedDate, setSelectedDate] = useState<any>(defaultSelectedDate);
     const [dataDate, setDataDate] = useState([]);
     const bookedDates: any[] = [];
@@ -68,7 +69,9 @@ export default function BasicDateRangePicker({ id, getDate, settotaldate }: prop
     };
 
     return (
-        <LocalizationProvider dateAdapter={DateFnsUtils as any}>
+        <LocalizationProvider
+            dateAdapter={DateFnsUtils as any}
+        >
             <DateRangePicker
                 startText="Nhận phòng"
                 endText="Trả phòng"
@@ -76,12 +79,14 @@ export default function BasicDateRangePicker({ id, getDate, settotaldate }: prop
                 shouldDisableDate={disableBookedDays}
                 value={selectedDate}
                 disablePast
+
                 onChange={(date: any) => setSelectedDate(date)}
                 renderInput={(startProps, endProps) => (
                     <>
                         <TextField {...startProps} />
                         <DateRangeDelimiter> to </DateRangeDelimiter>
-                        <TextField {...endProps} />
+                        <TextField disabled {...endProps} />
+                        {/* <input value={...endProps} /> */}
                     </>
                 )}
             />
