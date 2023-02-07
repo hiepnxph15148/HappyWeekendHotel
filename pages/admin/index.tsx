@@ -44,7 +44,7 @@ function Page() {
   const [mostUserRevenues, setMostUserRevenues] = useState<any>([])
   const [type, setType] = useState("QUATER")
   const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
   const [conditionMonth, setConditionMonth] = useState([]);
   const anchorRef = useRef<HTMLDivElement>(null);
   const time = new Date().getHours();

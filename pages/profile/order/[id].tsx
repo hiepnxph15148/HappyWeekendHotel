@@ -116,16 +116,24 @@ const DtailOrderHistory = (props: Props) => {
   };
   const methodPay = (key: string) => {
     if (key == "0") {
-      return <div>
-        Phương thức:  <span>Thanh toán trực tiếp</span>
+      return <div className="pb-[20px]">
+        <span className="font-medium">Phương thức:</span>
+        <span className="float-right">
+          Thanh toán trực tiếp
+        </span>
+
       </div>
     } else if (key == "1") {
-      return <div>
-        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Chưa thanh toán</span>
+      return <div className="pb-[20px]">
+        <span className="font-medium">Phương thức:</span>
+         <span className="float-right">Thanh toán trực tuyến</span>. <br /> 
+         <span className="float-right text-red-500">Chưa thanh toán</span>
       </div>
     } else if (key == "2") {
-      return <div>
-        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Đã thanh toán</span>
+      return <div className="pb-[20px]">
+        <span className="font-medium">Phương thức:</span>
+         <span className="float-right">Thanh toán trực tuyến</span>. <br /> 
+         <span className="float-right">Đã thanh toán</span>
       </div>
     }
   }

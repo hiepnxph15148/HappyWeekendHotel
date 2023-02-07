@@ -9,6 +9,8 @@ import { remove } from "../../../api/bookedDate";
 import { getOnefac } from "../../../api/facilities";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { API_URL } from "../../../constants";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 import dayjs from "dayjs";
 type Props = {};
 type Form = {
@@ -174,16 +176,24 @@ const DetailOrder = (props: Props) => {
 
   const methodPay = (key: string) => {
     if (key == "0") {
-      return <div>
-        Phương thức:  <span>Thanh toán trực tiếp</span>
+      return <div className="pb-[20px]">
+        <span className="font-medium">Phương thức:</span>
+        <span className="float-right">
+          Thanh toán trực tiếp
+        </span>
+
       </div>
     } else if (key == "1") {
-      return <div>
-        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Chưa thanh toán</span>
+      return <div className="pb-[20px]">
+        <span className="font-medium">Phương thức:</span>
+         <span className="float-right">Thanh toán trực tuyến</span>. <br /> 
+         <span className="float-right text-red-500">Chưa thanh toán</span>
       </div>
     } else if (key == "2") {
-      return <div>
-        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Đã thanh toán</span>
+      return <div className="pb-[20px]">
+        <span className="font-medium">Phương thức:</span>
+         <span className="float-right">Thanh toán trực tuyến</span>. <br /> 
+         <span className="float-right">Đã thanh toán</span>
       </div>
     }
   }
@@ -265,6 +275,7 @@ const DetailOrder = (props: Props) => {
               </span>
             </div>
             <div>
+              
               <div className="py-[10px]">
                 <label className="font-medium">Status Booking: </label>
                 <span className="float-right">{statuss(order?.order.statusorder)}</span>
@@ -272,9 +283,15 @@ const DetailOrder = (props: Props) => {
               <div>
                 {methodPay(order?.order.methodpay)}
               </div>
+
               <form action="" className="flex mt-[30px]" onSubmit={handleSubmit(onsubmit)}>
                 <div className="">{updateStatus(order?.order)} </div>
-                <button className="ml-[20px] inline-flex justify-center rounded-md border border-transparent bg-sky-400 py-[10px] px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <button onClick={()=>{
+                  router.push('/admin/order').then(()=>{
+                    toastr.success('Cập nhật thành công')
+                  })
+                  
+                }} className="ml-[20px] inline-flex justify-center rounded-md border border-transparent bg-sky-400 py-[10px] px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                   Cập Nhật
                 </button>
               </form>
